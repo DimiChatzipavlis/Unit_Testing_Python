@@ -1,6 +1,8 @@
 *.pytest_cache
 __pycache__
 *.pyc
-
-
-
+*.cpython-*
+*.cpython-312-pytest-8.3.5.pyc
+*.cpython-312.pyc
+.pytest_cache
+__pycache__/

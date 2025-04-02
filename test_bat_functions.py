@@ -95,7 +95,7 @@ def test_fetch_joker_info_mocked(monkeypatch):
     mock_response = {'mischief_level': 0, 'location': 'captured'}
 
     # Define a simple function that returns our custom data immediately
-    def mock_get(*args, **kwargs):
+    def mock_get():
         """Mocks the fetch_joker_info function."""
         print("\nCalled MOCK fetch_joker_info!")  # Optional: to see it's being called
         return mock_response
@@ -114,3 +114,4 @@ def test_fetch_joker_info_mocked(monkeypatch):
     assert (end_time - start_time) < 0.1, (
         "Test Failed: Mocked function took too long, sleep likely not patched."
     )
+    
