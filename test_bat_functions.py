@@ -63,3 +63,38 @@ def test_signal_strength_parametrized(test_distance, expected_strength):
            f"Test Failed: For distance {test_distance} km, expected {expected_strength} but got {calculated_strength}"
     
 
+# --- Exercise 3: Mocking External Dependencies ---
+
+# Task 3: Test fetch_joker_info using mocking
+def test_fetch_joker_info_mocked(monkeypatch):
+    """
+    Tests the fetch_joker_info function by mocking its behavior.
+
+    This test uses pytest's monkeypatch fixture to replace the actual
+    fetch_joker_info function with a mock version. This allows testing
+    code that *calls* fetch_joker_info without incurring the real delay
+    and ensures we can control the returned data for the test.
+
+    Args:
+        monkeypatch: Pytest fixture for modifying classes, methods, etc. for testing.
+    """
+    # Arrange: Define the custom data we want the mock to return
+    mock_response = {'mischief_level': 0, 'location': 'captured'}
+
+    # Define a simple function that returns our custom data immediately
+    def mock_get(*args, **kwargs):
+        print("\nCalled MOCK fetch_joker_info!") # Optional: to see it's being called
+        return mock_response
+
+    # Use monkeypatch to replace the real function with our mock
+    # Syntax: monkeypatch.setattr("module_name.FunctionName", mock_function)
+    monkeypatch.setattr("bat_functions.fetch_joker_info", mock_get)
+
+    # Act: Call the function (which is now the mock)
+    start_time = time.time()
+    result = fetch_joker_info()
+    end_time = time.time()
+
+    # Assert: Check that the result matches our mock data and that it ran quickly
+    assert result == mock_response, f"Expected {mock_response} but got {result}"
+    assert (end_time - start_time) < 0.1, "Test Failed: Mocked function took too long, sleep likely not patched."
