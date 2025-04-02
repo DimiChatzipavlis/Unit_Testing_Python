@@ -88,7 +88,7 @@ def test_fetch_joker_info_mocked(monkeypatch):
 
     # Use monkeypatch to replace the real function with our mock
     # Syntax: monkeypatch.setattr("module_name.FunctionName", mock_function)
-    monkeypatch.setattr("bat_functions.fetch_joker_info", mock_get)
+    monkeypatch.setattr("test_bat_functions.fetch_joker_info", mock_get)
 
     # Act: Call the function (which is now the mock)
     start_time = time.time()
