@@ -18,9 +18,6 @@ jobs:
       # Action to download your repository code into the runner
       uses: actions/checkout@v4 # Using version 4 of the checkout action
 
-    - name: Lint with PyLint
-      run: pylint test_bat_functions.py
-
     - name: Set up Python ${{ matrix.python-version }}
       # Action to install the specified Python version
       uses: actions/setup-python@v5 # Using version 5 of the setup-python action
@@ -31,10 +28,13 @@ jobs:
       # Run commands to install necessary packages
       run: |
         python -m pip install --upgrade pip
-        pip install pytest # Install pytest (add other dependencies here if needed)
+        pip install pytest pylint # Install pytest (add other dependencies here if needed)
         
 
     - name: Run tests with pytest
       # Execute the pytest command
       run: |
         pytest -v # Run pytest with verbose output
+    
+    - name: Lint with PyLint
+      run: pylint test_bat_functions.py
