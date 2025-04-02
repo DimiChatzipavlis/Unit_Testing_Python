@@ -1,10 +1,16 @@
 # test_bat_functions.py
 
-# Import the functions we want to test
-from bat_functions import calculate_bat_power, signal_strength, fetch_joker_info # Added fetch_joker_info
+"""Tests for the bat_functions module."""
 
-import pytest # Import pytest to use markers like parametrize
+# Standard library imports
 import time
+
+# Third-party imports
+import pytest
+
+# Local application/library imports
+from bat_functions import calculate_bat_power, signal_strength, fetch_joker_info
+
 
 # --- Exercise 1: Basic Tests and Parametrization ---
 
@@ -27,20 +33,24 @@ def test_calculate_bat_power_various_levels():
 
 
 # Task 2: Use pytest parametrization to test signal_strength with various distances.
-@pytest.mark.parametrize("test_distance, expected_strength", [
-    # Test case 1: 0 km distance, should be full strength
-    (0, 100.0),
-    # Test case 2: 2.5 km distance, fractional calculation
-    (2.5, 75.0),
-    # Test case 3: 5 km distance, exactly half strength expected based on formula
-    (5, 50.0),
-    # Test case 4: 10 km distance, strength should be exactly zero based on formula
-    (10, 0.0),
-    # Test case 5: 12 km distance, calculated strength is negative (-20), should clamp to 0
-    (12, 0.0),
-    # Test case 6: 15 km distance, calculated strength is negative (-50), should also clamp to 0
-    (15, 0.0),
-])
+@pytest.mark.parametrize(
+    "test_distance, expected_strength",
+    [
+        # Test case 1: 0 km distance, should be full strength
+        (0, 100.0),
+        # Test case 2: 2.5 km distance, fractional calculation
+        (2.5, 75.0),
+        # Test case 3: 5 km distance, exactly half strength expected based on formula
+        (5, 50.0),
+        # Test case 4: 10 km distance, strength should be exactly zero based on formula
+        (10, 0.0),
+        # Test case 5: 12 km distance, calculated strength is negative (-20), should clamp to 0
+        (12, 0.0),
+        # Test case 6: 15 km distance, calculated strength is negative (-50),
+        # should also clamp to 0
+        (15, 0.0),
+    ],
+)
 def test_signal_strength_parametrized(test_distance, expected_strength):
     """
     Tests the signal_strength function with various distances using parametrization.
@@ -58,10 +68,13 @@ def test_signal_strength_parametrized(test_distance, expected_strength):
     calculated_strength = signal_strength(distance=test_distance)
 
     # Assert: Check if the calculated strength matches the expected strength.
-    # Using pytest.approx for float comparison is often good practice, but exact values work here.
-    assert calculated_strength == expected_strength, \
-           f"Test Failed: For distance {test_distance} km, expected {expected_strength} but got {calculated_strength}"
-    
+    # Using pytest.approx for float comparison is often good practice,
+    # but exact values work here.
+    assert calculated_strength == expected_strength, (
+        f"Test Failed: For distance {test_distance} km, "
+        f"expected {expected_strength} but got {calculated_strength}"
+    )
+
 
 # --- Exercise 3: Mocking External Dependencies ---
 
@@ -83,7 +96,8 @@ def test_fetch_joker_info_mocked(monkeypatch):
 
     # Define a simple function that returns our custom data immediately
     def mock_get(*args, **kwargs):
-        print("\nCalled MOCK fetch_joker_info!") # Optional: to see it's being called
+        """Mocks the fetch_joker_info function."""
+        print("\nCalled MOCK fetch_joker_info!")  # Optional: to see it's being called
         return mock_response
 
     # Use monkeypatch to replace the real function with our mock
@@ -97,4 +111,6 @@ def test_fetch_joker_info_mocked(monkeypatch):
 
     # Assert: Check that the result matches our mock data and that it ran quickly
     assert result == mock_response, f"Expected {mock_response} but got {result}"
-    assert (end_time - start_time) < 0.1, "Test Failed: Mocked function took too long, sleep likely not patched."
+    assert (end_time - start_time) < 0.1, (
+        "Test Failed: Mocked function took too long, sleep likely not patched."
+    )
