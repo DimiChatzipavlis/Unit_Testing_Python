@@ -1,0 +1,38 @@
+# .github/workflows/pytest.yml
+
+name: Run Python Tests # Name of the workflow displayed on GitHub Actions tab
+
+on: [push] # Trigger the workflow on every push to any branch
+
+jobs:
+  build: # Define a job named 'build' (you can name it anything)
+    runs-on: ubuntu-latest # Specify the runner environment (Ubuntu is common)
+
+    strategy:
+      matrix:
+        # Run the tests on specified Python versions
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps: # Define the sequence of tasks within the job
+    - name: Check out repository code
+      # Action to download your repository code into the runner
+      uses: actions/checkout@v4 # Using version 4 of the checkout action
+
+    - name: Set up Python ${{ matrix.python-version }}
+      # Action to install the specified Python version
+      uses: actions/setup-python@v5 # Using version 5 of the setup-python action
+      with:
+        python-version: ${{ matrix.python-version }} # Use the version from the matrix
+
+    - name: Install dependencies
+      # Run commands to install necessary packages
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest # Install pytest (add other dependencies here if needed)
+        # If you had a requirements.txt file, you'd use:
+        # pip install -r requirements.txt
+
+    - name: Run tests with pytest
+      # Execute the pytest command
+      run: |
+        pytest -v # Run pytest with verbose output
